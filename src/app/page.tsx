@@ -1,53 +1,118 @@
+"use client";
+import DateCard from "@/components/DateCard";
+import { useAllEvents } from "@/hooks/useEvents";
+import { TEvent } from "@/types/types";
+import dayjs, { Dayjs } from "dayjs";
 import Image from "next/image";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
+import ScheduleView from "@/components/Schedule/ScheduleView";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+export async function fetchEvents(): Promise<TEvent[]> {
+  const response = await fetch("https://api.hackthenorth.com/v3/events");
+  if (!response.ok) throw new Error("Failed to fetch events");
+
+  const data: TEvent[] = await response.json();
+  return data;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const router = useRouter();
+  const sliderRef = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+  // const { events, loading, error } = useAllEvents();
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+
+  const [events, setEvents] = useState<TEvent[] | null>(null);
+
+  const [selectedDay, setSelectedDay] = useState<Dayjs>(
+    dayjs(dayjs("01-12-21"))
+  );
+  const [days, setDays] = useState<Dayjs[]>([
+    dayjs("01-12-21"),
+    dayjs("01-13-21"),
+    dayjs("12-01-21"),
+  ]);
+
+  useEffect(() => {
+    fetchEvents().then(setEvents).catch();
+  }, []);
+
+
+  return (
+    <div className="flex flex-col">
+      <nav className="fixed top-[5vh] left-1/2 transform -translate-x-1/2 w-4/5 rounded-full bg-background-secondary text-white z-50">
+        <div className="flex justify-between text-text-secondary py-3 px-10 text-xs items-center">
+          <a href="#" className="hover:text-gray-400">
+            Home
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div className="flex gap-10">
+            <a href="#" className="hover:text-gray-400">
+              Schedule
+            </a>
+            <a href="#" className="hover:text-gray-400">
+              FAQ
+            </a>
+            <a href="#" className="hover:text-gray-400">
+              Contact Us
+            </a>
+          </div>
+          <button
+            onClick={() => router.push('/signin')}
+            className="hover:text-gray-400 border px-3 py-1 border-text-secondary rounded-full cursor-pointer"
           >
-            Read our docs
-          </a>
+            Sign In
+          </button>
         </div>
+      </nav>{" "}
+      <main className="flex flex-col">
+        <section>
+          <div className="header flex flex-col px-16 py-36">
+            <h1 className="text-white text-5xl sm:text-7xl lg:text-8xl ">
+              Hackathon <br />
+              Global Inc.™
+            </h1>
+            <button
+              onClick={() => router.push('/auth/signin')}
+              className="text-white hover:text-gray-400 cursor-pointer"
+            >
+              Go to Page
+            </button>
+          </div>
+
+          <div className="px-16 ">
+            <div className="font-bold py-8 text-xl">February 2025</div>
+            <div className="flex flex-nowrap gap-2">
+              {days.map((day, index) => (
+                <section key={index}>
+                  <DateCard
+                    onClick={() => {
+                      setSelectedDay(day);
+                    }}
+                    date={day}
+                    isCurrent={selectedDay.isSame(day, "day")}
+                  />
+                </section>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="z-20">
+          {events && (
+            <ScheduleView
+              events={events.filter(
+                (event) =>
+                  dayjs(event.start_time).format("DD/MM/YYYY") ===
+                  selectedDay.format("DD/MM/YYYY")
+              )}
+            />
+          )}
+        </section>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

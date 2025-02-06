@@ -10,7 +10,12 @@ export default {
     extend: {
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)",
+        white: "var(--foreground)",
+        "text-secondary": "var(--text-secondary)",
+        "background-secondary": "var(--background-secondary)",
+        blue: "var(--blue)",
+        pink: "var(--pink)",
+        teal: "var(--teal)",
       },
     },
   },
