@@ -52,6 +52,13 @@ export default function Home() {
     }
   }, [selectedDay]);
 
+  // State to track if component has mounted (client-side)
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Set to true after the component mounts
+  }, []);
+
   return (
     <div className="flex flex-col font-dmSans overflow-hidden">
       <NavBar user={user} setUser={setUser} />
@@ -66,22 +73,25 @@ export default function Home() {
             }}
             className="header h-[100vh] w-[100vw] overflow-hidden flex flex-col px-16 py-36 text-white text-5xl sm:text-7xl lg:text-8xl font-semibold "
           >
-            <TextScramble
-              text="Hackathon"
-              autostart
-              revealText
-              revealSpeed={200}
-              revealMode="typewriter"
-            />
-            <TextScramble
-              text="Global Inc.™"
-              autostart
-              wrappingElement="p"
-              revealText
-              revealSpeed={200}
-              revealMode="typewriter"
-            />
-
+            {isClient && (
+              <>
+                <TextScramble
+                  text="Hackathon"
+                  autostart
+                  revealText
+                  revealSpeed={200}
+                  revealMode="typewriter"
+                />
+                <TextScramble
+                  text="Global Inc.™"
+                  autostart
+                  wrappingElement="p"
+                  revealText
+                  revealSpeed={200}
+                  revealMode="typewriter"
+                />
+              </>
+            )}
             <h3 className="text-text-secondary text-xl sm:text-2xl lg:text-3xl font-medium font-robotoMono ">
               // ctrl + alt + innovate.
             </h3>
