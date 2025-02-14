@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Your Next.js config here
+  experimental: {
+    appDir: true, 
+  },
 };
 
 module.exports = nextConfig;
