@@ -16,7 +16,7 @@ import techTalkImage from "./assets/tech_talk.png";
 import workshopImage from "./assets/workshop.png";
 import activityImage from "./assets/activity.png";
 import TextScramble from "@skits/react-text-scramble";
-import * as motion from "motion/react-client";
+import { motion } from "motion/react";
 
 export default function Home() {
   const userContext = useContext(UserContext);
@@ -38,7 +38,6 @@ export default function Home() {
 
   useEffect(() => {
     if (events) {
-      console.log(events);
       let filteredEvents =
         user.type === "Guest"
           ? events.filter((event: TEvent) => event.permission === "public")
@@ -94,8 +93,14 @@ export default function Home() {
           ) : error ? (
             <p>Error: {error.message}</p>
           ) : (
-            <div className="flex flex-wrap gap-10 w-full px-8 sm:px-0 sm:w-3/5 ">
-              <div className="public-event-dates flex flex-col ">
+            <motion.div className="flex flex-wrap gap-10 w-full px-8 sm:px-0 sm:w-3/5 ">
+              <motion.div
+                initial={{ opacity: 0.2, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true, amount: 0.5 }}
+                className="public-event-dates flex flex-col "
+              >
                 <div className="font-bold text-text-secondary py-8 text-xl">
                   January 2021
                 </div>
@@ -112,8 +117,14 @@ export default function Home() {
                     />
                   ))}
                 </div>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0.2, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true, amount: 0.5 }}
+                className="public-event-dates flex flex-col "
+              >
                 {user.type === "Guest" ? (
                   <div>
                     <div className="private-event-dates font-bold text-pink blur-sm py-8 text-xl">
@@ -150,17 +161,19 @@ export default function Home() {
                     />
                   </div>
                 )}
+              </motion.div>
+              <div>
+                {selectedDay && filteredEvents && (
+                  <ScheduleView
+                    events={filteredEvents.filter(
+                      (event: TEvent) =>
+                        dayjs(event.start_time).format("DD/MM/YYYY") ===
+                        selectedDay.format("DD/MM/YYYY")
+                    )}
+                  />
+                )}
               </div>
-              {selectedDay && filteredEvents && (
-                <ScheduleView
-                  events={filteredEvents.filter(
-                    (event: TEvent) =>
-                      dayjs(event.start_time).format("DD/MM/YYYY") ===
-                      selectedDay.format("DD/MM/YYYY")
-                  )}
-                />
-              )}
-            </div>
+            </motion.div>
           )}
         </section>
         <section id="faq" className="w-full px-16 h-[500px]">
@@ -179,7 +192,6 @@ export default function Home() {
             Nothing to see here either...sorry about that!
           </h3>
         </section>
-
         <Image
           src={techTalkImage}
           alt="tech-talk-mascot"
@@ -197,53 +209,6 @@ export default function Home() {
           className="absolute -right-16 top-[2000px] transform -rotate-12 w-48 sm:w-80 h-auto z-10 pointer-events-none opacity-50"
         />
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

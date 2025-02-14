@@ -2,7 +2,8 @@ import { PreferencesContext } from "@/contexts/PreferencesContext";
 import { Preferences } from "@/types/types";
 import { Select } from "antd";
 import Search from "antd/es/input/Search";
-import React, { useContext, useState } from "react";
+import React from "react";
+import { motion } from "motion/react";
 
 interface Props {
   onSearch: (search: string) => void;
@@ -12,7 +13,13 @@ interface Props {
 export default function EventFilters({ onSearch, preferences, setPreferences }: Props) {
 
   return (
-    <div className="w-full flex flex-wrap gap-5 md:gap-x-10">
+    <motion.div
+    initial={{ opacity: 0.2, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    viewport={{ once: true, amount: 0.5 }}
+    className="w-full flex flex-wrap gap-5 md:gap-x-10"
+  >
       <Search
         placeholder="Search Events"
         onSearch={onSearch}
@@ -39,6 +46,6 @@ export default function EventFilters({ onSearch, preferences, setPreferences }: 
         <Select.Option value="tech_talk">Tech Talk</Select.Option>
         <Select.Option value="activity">Activity</Select.Option>
       </Select>
-    </div>
+    </motion.div>
   );
 }

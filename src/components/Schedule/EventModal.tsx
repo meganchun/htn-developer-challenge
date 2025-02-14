@@ -105,17 +105,6 @@ export default function EventModal({ open, setOpen, event, user }: Props) {
                   </h2>
                 ))
               )}
-              {/* {event.related_events.map((event) => {
-                const {data, loading, error} = useEvent(event)
-          
-              ( data && 
-                <h2
-                  className="border border-blue text-blue rounded p-2"
-                  key={event}
-                >
-                  {event}
-                </h2>
-              ))} */}
             </div>
           </div>
         </div>

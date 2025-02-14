@@ -7,7 +7,7 @@ import dayjs, { Dayjs } from "dayjs";
 import EventFilters from "./EventFilters";
 import { UserContext } from "@/contexts/UserContext";
 import { PreferencesContext } from "@/contexts/PreferencesContext";
-import { motion } from "motion/react";
+import { motion } from "motion/react"
 
 interface Props {
   events: TEvent[];
@@ -121,7 +121,7 @@ export default function ScheduleView({ events }: Props) {
         preferences={preferences}
         setPreferences={setPreferences}
       />
-      <div className="calendar-grid grid grid-cols-[75px_1fr] w-full">
+      <div className="calendar-grid grid grid-cols-[50px_1fr] sm:grid-cols-[75px_1fr] w-full">
         <div
           className="times-column grid"
           style={{

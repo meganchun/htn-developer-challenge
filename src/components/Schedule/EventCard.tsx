@@ -2,12 +2,12 @@
 
 import { TEvent, User } from "@/types/types";
 import dayjs from "dayjs";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { IoGameController } from "react-icons/io5";
 import { FaLightbulb, FaWrench } from "react-icons/fa";
 import EventModal from "./EventModal";
-import { useEvent } from "@/hooks/useEvents";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
+import { motion } from "motion/react"
 
 interface Props {
   event: TEvent;
@@ -20,7 +20,11 @@ export default function EventCard({ event, className, accent, user }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0.2, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, amount: 0.5 }}
       style={{ color: `var(--${accent})` }}
       className={`${className}
  text-start flex h-full flex-wrap sm:flex-row rounded text-${accent} ${
@@ -89,6 +93,6 @@ export default function EventCard({ event, className, accent, user }: Props) {
         </div>
       </div>
       <EventModal open={open} setOpen={setOpen} event={event} user={user} />
-    </div>
+    </motion.div>
   );
 }
