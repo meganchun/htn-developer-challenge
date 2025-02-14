@@ -37,11 +37,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (events) {
-      let filteredEvents =
-        user.type === "Guest"
-          ? events.filter((event: TEvent) => event.permission === "public")
-          : events;
+    if (events && user) {
+      const isGuest = user.type === "Guest";
+      const publicEvents = events.filter((event: TEvent) => event.permission === "public");
+      const filteredEvents = isGuest ? publicEvents : events;
       setFilteredEvents(filteredEvents);
     }
   }, [events, user]);
