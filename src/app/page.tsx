@@ -44,6 +44,12 @@ export default function Home() {
       );
       const filteredEvents = isGuest ? publicEvents : events;
       setFilteredEvents(filteredEvents);
+    } else if (events) {
+      // Fallback to public events if user is somehow null
+      const publicEvents = events.filter(
+        (event: TEvent) => event.permission === "public"
+      );
+      setFilteredEvents(publicEvents);
     }
   }, [events, user]);
 
@@ -74,9 +80,25 @@ export default function Home() {
             }}
             className="header h-[100vh] w-[100vw] overflow-hidden flex flex-col px-16 py-36 text-white text-5xl sm:text-7xl lg:text-8xl font-semibold "
           >
-            <h1 className="text-white text-5xl sm:text-7xl lg:text-8xl font-semibold">
-              Hackathon <br /> Global Inc.™
-            </h1>
+            {isClient && (
+              <>
+                <TextScramble
+                  text="Hackathon"
+                  autostart
+                  revealText
+                  revealSpeed={200}
+                  revealMode="typewriter"
+                />
+                <TextScramble
+                  text="Global Inc.™"
+                  autostart
+                  wrappingElement="p"
+                  revealText
+                  revealSpeed={200}
+                  revealMode="typewriter"
+                />
+              </>
+            )}
             <h3 className="text-text-secondary text-xl sm:text-2xl lg:text-3xl font-medium font-robotoMono ">
               // ctrl + alt + innovate.
             </h3>

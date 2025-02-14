@@ -11,15 +11,15 @@ export const UserProvider = ({ children }: Props) => {
     // If stored data exists, use it
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
-      return storedUser ? JSON.parse(storedUser) : null;
+      return storedUser ? JSON.parse(storedUser) : { type: "Guest" };
     }
     // Else return guest user
     return { type: "Guest" };
   });
   useEffect(() => {
     if (typeof window !== "undefined")
-      localStorage.setItem("user", JSON.stringify(user));
-  });
+      localStorage.setItem("user", JSON.stringify(user || { type: "Guest" }));
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
