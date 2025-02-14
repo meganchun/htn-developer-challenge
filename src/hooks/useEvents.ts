@@ -1,14 +1,19 @@
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_ALL_EVENTS, GET_EVENT_BY_ID } from "@/graphql/queries/EventsQueries";
+import { TEvent } from "@/types/types";
+import { useMemo } from "react";
 
-export function useEvent(id: number) {
-    const { data, loading, error } = useQuery(GET_EVENT_BY_ID, { variables: { id } });
-  
-    return { user: data?.event, loading, error };
+export function useEvent() {
+    const [getEvent, { data, loading, error }] = useLazyQuery(GET_EVENT_BY_ID);
+    return { getEvent, data, loading, error };
 }
 
 export function useAllEvents() {
     const { data, loading, error } = useQuery(GET_ALL_EVENTS);
-  
-    return { events: data?.event, loading, error };
+
+    return useMemo(() => ({
+        events: data?.sampleEvents || [],
+        loading,
+        error
+    }), [data, loading, error]);
 }

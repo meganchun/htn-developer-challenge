@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 type TEventType = "workshop" | "activity" | "tech_talk";
 type TPermission = "public" | "private";
 
@@ -26,4 +28,9 @@ export type TEndpointResponse = TEvent | TEvent[];
 
 export type User = {
   type: "Hacker" | "Guest"
+}
+
+export type Preferences = {
+  eventDate: Dayjs,
+  eventType: "all" | "workshop" | "activity" | "tech_talk"
 }

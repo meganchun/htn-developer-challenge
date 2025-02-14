@@ -1,5 +1,4 @@
 "use client";
-
 import {
   ApolloProvider,
   ApolloClient,
@@ -10,8 +9,14 @@ import {
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: "https://api.hackthenorth.com/v3/events ",
-    credentials: "same-origin",
+    uri: "https://api.hackthenorth.com/v3/frontend-challenge",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    fetchOptions: {
+      method: 'POST',
+    },
   }),
 });
 

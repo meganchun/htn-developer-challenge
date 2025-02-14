@@ -17,6 +17,10 @@ export default {
         pink: "var(--pink)",
         teal: "var(--teal)",
       },
+      fontFamily: {
+        dmSans: "var(--font-dm-sans), sans-serif",
+        robotoMono: "var(--font-roboto-mono), monospace",
+      },
     },
   },
   plugins: [],
