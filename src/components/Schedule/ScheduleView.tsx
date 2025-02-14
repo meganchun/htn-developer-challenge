@@ -12,13 +12,13 @@ import { motion } from "motion/react";
 interface Props {
   events: TEvent[];
 }
+
 export default function ScheduleView({ events }: Props) {
   const [filteredEvents, setFilteredEvents] = useState<TEvent[] | null>(null);
 
   const [times, setTimes] = useState<Dayjs[]>([]);
   const [earliestTime, setEarliestTime] = useState<number>(0);
   const [lastestHour, setLastestHour] = useState<number>(0);
-  const [diff, setDiff] = useState<number>(0);
   const [numCols, setNumCols] = useState(2);
 
   const userContext = useContext(UserContext);
@@ -73,11 +73,12 @@ export default function ScheduleView({ events }: Props) {
       const timesArray = [];
       for (
         let i = earliestTime === 0 ? 0 : earliestTime - 1;
-        i <= (lastestHour === 24 ? 24 : lastestHour + 1);
+        i < (lastestHour === 24 ? 24 : lastestHour + 1);
         i++
       ) {
         timesArray.push(dayjs().hour(i).minute(0).second(0));
       }
+
       setTimes(timesArray);
     }
   }, [earliestTime, lastestHour, events]);
@@ -101,10 +102,10 @@ export default function ScheduleView({ events }: Props) {
     }
   };
 
-  const gridRowTemplate =
-    times.length > 0
-      ? `repeat(${times.length * 2}, minmax(75px, auto))`
-      : "repeat(48, minmax(75px, auto))";
+  const calculateGridRows = () => {
+    const rows = (lastestHour - earliestTime + 2) * 2; // +2 to account for time padding
+    return `repeat(${rows}, minmax(2rem, 1fr))`;
+  };
 
   return (
     <motion.div
@@ -113,42 +114,39 @@ export default function ScheduleView({ events }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ amount: 0.2 }}
       transition={{ duration: 0.4 }}
-      className="my-4 flex flex-col justify-center items-center gap-16 h-fit"
+      className="flex flex-col justify-center items-center gap-16 h-fit"
     >
       <EventFilters
         onSearch={onSearch}
         preferences={preferences}
         setPreferences={setPreferences}
       />
-      <div className="calendar-grid grid grid-cols-[50px_1fr] ">
+      <div className="calendar-grid grid grid-cols-[75px_1fr] w-full">
         <div
-          className="times-column grid gap-1"
+          className="times-column grid"
           style={{
-            gridTemplateRows: gridRowTemplate,
+            gridTemplateRows: calculateGridRows(),
           }}
         >
           {times.map((time, index) => (
             <div
               key={index}
+              className="flex items-center justify-end pr-2 text-sm text-text-secondary"
               style={{
-                gridRow: `span 2`,
+                gridRow: `${index * 2} / span 2`,
               }}
-              className="flex "
             >
-              <h3 className="text-sm text-text-secondary">
-                {time.format("h")} {time.hour() >= 12 ? "PM" : "AM"}
-              </h3>
+              {time.format("h A")}
             </div>
           ))}
         </div>
 
         <div
+          className="events-column grid gap-2"
           style={{
-            display: "grid",
             gridTemplateColumns: `repeat(${numCols}, 1fr)`,
-            gridTemplateRows: gridRowTemplate,
+            gridTemplateRows: calculateGridRows(),
           }}
-          className="filteredEvents-columns gap-2 gap-x-10 "
         >
           {filteredEvents &&
             filteredEvents.map((event, index) => {
@@ -160,7 +158,8 @@ export default function ScheduleView({ events }: Props) {
               const startMinutes = startTime.minute();
               const halfHourOffset = startMinutes >= 30 ? 1 : 0;
               const rowStart =
-                (startHour - earliestTime) * 2 + halfHourOffset + diff * 2;
+                (startHour - earliestTime) * 2 + halfHourOffset + 3; // +1 to account for grid indexing +2 to account for 1 hour padding
+
               const durationInMinutes = endTime.diff(startTime, "minutes");
               const rowSpan = Math.max(Math.ceil(durationInMinutes / 30), 1);
 
@@ -179,7 +178,7 @@ export default function ScheduleView({ events }: Props) {
                   (startTime <= eStart && endTime >= eEnd)
                 );
               });
-              const column = (overlappingEvents.length % 4) + 1;
+              const column = (overlappingEvents.length % 3) + 1;
 
               return (
                 <div
@@ -191,7 +190,6 @@ export default function ScheduleView({ events }: Props) {
                   }}
                 >
                   <EventCard
-                    key={event.id}
                     event={event}
                     accent={
                       event.event_type === "activity"

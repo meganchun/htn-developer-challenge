@@ -120,7 +120,7 @@ export default function Home() {
                       December 2021
                     </div>
                     <Tooltip title="Sign in to unlock!" placement="top">
-                      <div className="relative flex justify-center items-center w-[110px] h-[85px] p-3 sm:w-[150px] sm:h-[100px] border border-pink rounded-lg">
+                      <div className="relative flex justify-center items-center w-[110px]  h-[50px] p-3 sm:w-[150px] sm:h-[75px] border border-pink rounded-lg">
                         <div className="hover-border-blur absolute inset-0 z-10 border-4 border-pink blur-sm" />
                         <Image
                           src={lockImage}
@@ -179,18 +179,18 @@ export default function Home() {
             Nothing to see here either...sorry about that!
           </h3>
         </section>
-       
-          <Image
-            src={techTalkImage}
-            alt="tech-talk-mascot"
-            className="absolute -right-24 top-[250px] transform -rotate-12 w-64 h-auto z-10"
-          />
-        
-          <Image
-            src={workshopImage}
-            alt="workshop-mascot"
-            className="absolute -left-24 top-[1200px] transform rotate-12 w-32 sm:w-64 h-auto z-10 pointer-events-none opacity-50"
-          />
+
+        <Image
+          src={techTalkImage}
+          alt="tech-talk-mascot"
+          className="absolute -right-24 top-[250px] transform -rotate-12 w-64 h-auto z-10"
+        />
+
+        <Image
+          src={workshopImage}
+          alt="workshop-mascot"
+          className="absolute -left-24 top-[1200px] transform rotate-12 w-32 sm:w-64 h-auto z-10 pointer-events-none opacity-50"
+        />
         <Image
           src={activityImage}
           alt="activity-mascot"
