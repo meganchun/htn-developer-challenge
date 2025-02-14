@@ -178,7 +178,7 @@ export default function ScheduleView({ events }: Props) {
                   (startTime <= eStart && endTime >= eEnd)
                 );
               });
-              const column = (overlappingEvents.length % 3) + 1;
+              const column = (overlappingEvents.length % 4) + 1;
 
               return (
                 <div
