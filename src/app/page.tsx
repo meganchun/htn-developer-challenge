@@ -53,22 +53,6 @@ export default function Home() {
     }
   }, [selectedDay]);
 
-  useEffect(() => {
-    // Custom error handling for Next.js router errors
-    const originalConsoleError = window.console.error;
-    window.console.error = (...args: any[]) => {
-      // Assuming h.isNextRouterError is imported or defined
-      if (!h.isNextRouterError(args[0])) {
-        originalConsoleError.apply(window.console, args);
-      }
-    };
-
-    // Cleanup: restore original console.error on component unmount
-    return () => {
-      window.console.error = originalConsoleError;
-    };
-  }, []);
-
   // State to track if component has mounted (client-side)
   const [isClient, setIsClient] = useState(false);
 
