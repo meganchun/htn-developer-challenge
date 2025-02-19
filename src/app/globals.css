@@ -5,18 +5,11 @@
 :root {
   --background: #111117;
   --foreground: #ededed;
-  --text-secondary: #4A4E69;
-  --background-secondary: #1F2238; 
-  --blue: #18A0FB;
-  --pink: #EE46D3;
-  --teal: #00C5DF;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --foreground: #0a0a0a;
-    --background: #ededed;
-  }
+  --text-secondary: #4a4e69;
+  --background-secondary: #1f2238;
+  --blue: #18a0fb;
+  --pink: #ee46d3;
+  --teal: #00c5df;
 }
 
 body {
